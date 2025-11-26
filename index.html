@@ -620,12 +620,26 @@
             }, 500);
         }
 
-        // Click anywhere for confetti burst
+        // Click anywhere for confetti burst and text
         document.addEventListener('click', (e) => {
-            if (!e.target.classList.contains('gift-box') && !e.target.classList.contains('music-btn')) {
+            if (!e.target.classList.contains('gift-box') && !e.target.classList.contains('music-btn') && !e.target.classList.contains('shake-btn')) {
                 createConfettiBurst(e.clientX, e.clientY);
+                createParticleText(e.clientX, e.clientY);
             }
         });
+
+        // Particle text on click
+        const wishes = ['🎉', '🎊', '🎈', '🎁', '💝', '✨', '🌟', '💫', 'Happy!', 'Yay!', 'Wow!'];
+        function createParticleText(x, y) {
+            const text = document.createElement('div');
+            text.className = 'particle-text';
+            text.textContent = wishes[Math.floor(Math.random() * wishes.length)];
+            text.style.left = x + 'px';
+            text.style.top = y + 'px';
+            text.style.color = `hsl(${Math.random() * 360}, 100%, 50%)`;
+            document.body.appendChild(text);
+            setTimeout(() => text.remove(), 3000);
+        }
 
         function createConfettiBurst(x, y) {
             const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
@@ -829,6 +843,210 @@
             const btn = document.querySelector('.music-btn');
             btn.textContent = '🎵 Nhạc (Click để tắt)';
         }, 2000);
+
+        // Countdown timer
+        let countdownValue = 10;
+        const countdownEl = document.getElementById('countdown');
+        const countdownInterval = setInterval(() => {
+            countdownValue--;
+            if (countdownValue > 0) {
+                countdownEl.textContent = `🎂 ${countdownValue} giây nữa có bất ngờ... 🎂`;
+            } else {
+                countdownEl.textContent = '🎉 CHÚC MỪNG SINH NHẬT! 🎉';
+                clearInterval(countdownInterval);
+                showNeonText();
+                createEmojiRain();
+            }
+        }, 1000);
+
+        // Neon text flash
+        function showNeonText() {
+            const neon = document.getElementById('neonText');
+            neon.style.opacity = '1';
+            setTimeout(() => {
+                neon.style.opacity = '0';
+            }, 3000);
+        }
+
+        // Emoji rain
+        function createEmojiRain() {
+            const emojis = ['🎉', '🎊', '🎈', '🎁', '🎂', '🍰', '🎀', '💝', '✨', '🌟'];
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const emoji = document.createElement('div');
+                    emoji.className = 'emoji-rain';
+                    emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                    emoji.style.left = Math.random() * 100 + '%';
+                    emoji.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                    emoji.style.animationDelay = (Math.random() * 2) + 's';
+                    document.body.appendChild(emoji);
+                    setTimeout(() => emoji.remove(), 8000);
+                }, i * 100);
+            }
+        }
+
+        // Photo frame spin
+        function spinPhoto() {
+            const frame = document.getElementById('photoFrame');
+            frame.style.animation = 'none';
+            setTimeout(() => {
+                frame.style.animation = 'spin 1s linear, photoSpin 20s linear infinite';
+            }, 10);
+            
+            // Create spiral emojis
+            createSpiralEmojis();
+        }
+
+        function createSpiralEmojis() {
+            const emojis = ['💖', '💕', '💗', '💓', '💝'];
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    const emoji = document.createElement('div');
+                    emoji.className = 'spiral-emoji';
+                    emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                    
+                    const centerX = window.innerWidth / 2;
+                    const centerY = window.innerHeight / 2;
+                    const angle = (i / 20) * Math.PI * 4;
+                    const radius = 50 + i * 15;
+                    
+                    emoji.style.left = (centerX + Math.cos(angle) * radius) + 'px';
+                    emoji.style.top = (centerY + Math.sin(angle) * radius) + 'px';
+                    
+                    document.body.appendChild(emoji);
+                    
+                    let currentAngle = angle;
+                    let currentRadius = radius;
+                    const animate = () => {
+                        currentAngle += 0.05;
+                        currentRadius += 2;
+                        emoji.style.left = (centerX + Math.cos(currentAngle) * currentRadius) + 'px';
+                        emoji.style.top = (centerY + Math.sin(currentAngle) * currentRadius) + 'px';
+                        emoji.style.opacity = Math.max(0, 1 - currentRadius / 500);
+                        
+                        if (currentRadius < 500) {
+                            requestAnimationFrame(animate);
+                        } else {
+                            emoji.remove();
+                        }
+                    };
+                    animate();
+                }, i * 50);
+            }
+        }
+
+        // Shake everything
+        function shakeEverything() {
+            const container = document.querySelector('.container');
+            const message = document.querySelector('.message');
+            const cake = document.querySelector('.cake');
+            
+            [container, message, cake].forEach(el => {
+                el.style.animation = 'shake 0.5s';
+                setTimeout(() => {
+                    el.style.animation = '';
+                }, 500);
+            });
+
+            // Create massive confetti
+            for (let i = 0; i < 100; i++) {
+                setTimeout(() => {
+                    const x = Math.random() * window.innerWidth;
+                    const y = Math.random() * window.innerHeight;
+                    createConfettiBurst(x, y);
+                }, i * 20);
+            }
+
+            // Matrix rain effect
+            createMatrixRain();
+        }
+
+        function createMatrixRain() {
+            const chars = 'HAPPYBIRTHDAYTRIET0123456789@#$%^&*()';
+            for (let i = 0; i < 30; i++) {
+                const column = document.createElement('div');
+                column.className = 'matrix-rain';
+                column.style.left = Math.random() * 100 + '%';
+                column.style.top = '-50px';
+                document.body.appendChild(column);
+
+                let text = '';
+                for (let j = 0; j < 20; j++) {
+                    text += chars[Math.floor(Math.random() * chars.length)] + '<br>';
+                }
+                column.innerHTML = text;
+
+                let posY = -50;
+                const fall = setInterval(() => {
+                    posY += 5;
+                    column.style.top = posY + 'px';
+                    if (posY > window.innerHeight) {
+                        clearInterval(fall);
+                        column.remove();
+                    }
+                }, 50);
+            }
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === ' ') {
+                e.preventDefault();
+                createEmojiRain();
+            } else if (e.key === 'Enter') {
+                shakeEverything();
+            } else if (e.key === 's' || e.key === 'S') {
+                showNeonText();
+            }
+        });
+
+        // Double click for mega effect
+        let clickCount = 0;
+        let clickTimer;
+        document.addEventListener('click', () => {
+            clickCount++;
+            clearTimeout(clickTimer);
+            clickTimer = setTimeout(() => {
+                if (clickCount >= 5) {
+                    megaCelebration();
+                }
+                clickCount = 0;
+            }, 1000);
+        });
+
+        function megaCelebration() {
+            showNeonText();
+            createEmojiRain();
+            shakeEverything();
+            
+            // Change background colors rapidly
+            let colorIndex = 0;
+            const colors = [
+                'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
+                'linear-gradient(135deg, #f093fb 0%, #f5576c 50%, #4facfe 100%)',
+                'linear-gradient(135deg, #43e97b 0%, #38f9d7 50%, #667eea 100%)',
+                'linear-gradient(135deg, #fa709a 0%, #fee140 50%, #30cfd0 100%)'
+            ];
+            
+            const colorInterval = setInterval(() => {
+                document.body.style.background = colors[colorIndex % colors.length];
+                document.body.style.backgroundSize = '400% 400%';
+                colorIndex++;
+                if (colorIndex > 20) {
+                    clearInterval(colorInterval);
+                    document.body.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)';
+                }
+            }, 200);
+
+            alert('🎊🎉 MEGA CELEBRATION MODE! 🎉🎊\n\nChúc Triết sinh nhật thật vui vẻ và hạnh phúc! 💝');
+        }
+
+        // Random surprise every 15 seconds
+        setInterval(() => {
+            const surprises = [createEmojiRain, spinPhoto, showNeonText];
+            const randomSurprise = surprises[Math.floor(Math.random() * surprises.length)];
+            randomSurprise();
+        }, 15000);
     </script>
 </body>
 </html>
